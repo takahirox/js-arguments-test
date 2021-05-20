@@ -1,0 +1,74 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>JavaScript Arguments micro benchmark test</h1>
+
+    <button id="runNormalButton">Run normal</button> <span id="normalResult"></span><br />
+    <button id="runArgumentsButton">Run arguments</button> <span id="argumentsResult"></span><br />
+    <button id="runSpreadOpButton">Run sperad operator</button> <span id="spreadOpResult"></span><br />
+
+    <h2>How to test</h2>
+
+    <p>For performance: Click each button and see the result appearing next to the button.</p>
+
+    <p>For memory: Open Web browser devtool Memory or Performance tab, start the capturing,
+    click each button, stop the capturing, and see the result of memory cunsomption or memory allocation.</p>
+
+    <h2>Test code</h2>
+    <pre id="testCode"></pre><br />
+    <script id="testScript">
+      const loopNum = 0x20000000;
+
+      document.getElementById('runNormalButton').addEventListener('click', () => {
+        const startTime = performance.now();
+        let sum = 0;
+        for (let i = 0; i < loopNum; i++) {
+          sum += normalOp(1, 2);
+        }
+        const endTime = performance.now();
+        document.getElementById('normalResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
+      });
+
+      document.getElementById('runArgumentsButton').addEventListener('click', () => {
+        const startTime = performance.now();
+        let sum = 0;
+        for (let i = 0; i < loopNum; i++) {
+          sum += leakyArguments(1, 2);
+        }
+        const endTime = performance.now();
+        document.getElementById('argumentsResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
+      });
+
+      document.getElementById('runSpreadOpButton').addEventListener('click', () => {
+        const startTime = performance.now();
+        let sum = 0;
+        for (let i = 0; i < loopNum; i++) {
+          sum += spreadOp(1, 2);
+        }
+        const endTime = performance.now();
+        document.getElementById('spreadOpResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
+      });
+
+      const other = (a, b) => {
+        return a + b;
+      };
+
+      const normalOp = (a, b) => {
+        return other(a, b);
+      };
+
+      function leakyArguments() {
+        return other.apply(this, arguments);
+      }
+
+      const spreadOp = (...args) => {
+        return other.apply(this, args);
+      };
+    </script>
+    <script>
+      document.getElementById('testCode').innerText = document.getElementById('testScript').innerText.replace(/      /g, '');
+    </script>
+    <p><a href="https://github.com/takahirox/js-arguments-test">GitHub</a></p>
+  </body>
+</html>
