@@ -5,18 +5,17 @@
     <h1>JavaScript Arguments micro benchmark test</h1>
 
     <button id="runNormalButton">Run normal</button> <span id="normalResult"></span><br />
-    <button id="runArgumentsButton">Run arguments</button> <span id="argumentsResult"></span><br />
-    <button id="runSpreadOpButton">Run sperad operator</button> <span id="spreadOpResult"></span><br />
+    <button id="runLeakyArgumentsButton">Run leaky arguments</button> <span id="leakyArgumentsResult"></span><br />
+    <button id="runSpreadOpButton">Run spread operator</button> <span id="spreadOpResult"></span><br />
     <button id="runIndexedArgumentsButton">Run indexed arguments</button> <span id="indexedArgumentsResult"></span><br /><br />
-    <button id="runFastArgLengthButton">Run fast arguments length check</button> <span id="fastArgLengthResult"></span><br />
-    <button id="runSlowArgLengthButton">Run slow arguments length check</button> <span id="slowArgLengthResult"></span><br />
+    <button id="runArgLengthButton">Run arguments length check</button> <span id="argLengthResult"></span><br />
 
     <h2>How to test</h2>
 
     <p>For performance: Click each button and see the result appearing next to the button.</p>
 
     <p>For memory: Open Web browser devtool Memory or Performance tab, start the capturing,
-    click each button, stop the capturing, and see the result of memory cunsomption or memory allocation.</p>
+    click each button, stop the capturing, and see the result of memory consumption or memory allocation.</p>
 
     <h2>Test code</h2>
     <pre id="testCode"></pre><br />
@@ -33,14 +32,14 @@
         document.getElementById('normalResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
       });
 
-      document.getElementById('runArgumentsButton').addEventListener('click', () => {
+      document.getElementById('runLeakyArgumentsButton').addEventListener('click', () => {
         const startTime = performance.now();
         let sum = 0;
         for (let i = 0; i < loopNum; i++) {
           sum += leakyArguments(1, 2);
         }
         const endTime = performance.now();
-        document.getElementById('argumentsResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
+        document.getElementById('leakyArgumentsResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
       });
 
       document.getElementById('runSpreadOpButton').addEventListener('click', () => {
@@ -63,24 +62,14 @@
         document.getElementById('indexedArgumentsResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
       });
 
-      document.getElementById('runFastArgLengthButton').addEventListener('click', () => {
+      document.getElementById('runArgLengthButton').addEventListener('click', () => {
         const startTime = performance.now();
         let sum = 0;
         for (let i = 0; i < loopNum; i++) {
-          sum += fastArgLength(1, 2);
+          sum += argLength(1, 2);
         }
         const endTime = performance.now();
-        document.getElementById('fastArgLengthResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
-      });
-
-      document.getElementById('runSlowArgLengthButton').addEventListener('click', () => {
-        const startTime = performance.now();
-        let sum = 0;
-        for (let i = 0; i < loopNum; i++) {
-          sum += slowArgLength(1, 2);
-        }
-        const endTime = performance.now();
-        document.getElementById('slowArgLengthResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
+        document.getElementById('argLengthResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
       });
 
       const other = (a, b) => {
@@ -103,15 +92,8 @@
         return other(arguments[0], arguments[1]);
       }
 
-      function fastArgLength(a, b) {
-        if (arguments.length > 0) {
-          return other(a, b);
-        }
-        return 0;
-      }
-
-      function slowArgLength(a, b) {
-        if (arguments.length > 2) {
+      function argLength(a, b) {
+        if (arguments.length < 3) {
           return other(a, b);
         }
         return 0;
