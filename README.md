@@ -20,18 +20,11 @@ function indexedArguments() {
 }
 ```
 
-We added arguments.length check tests.
+We added an arguments.length check test.
 
 ```javascript
-function fastArgLength(a, b) {
-  if (arguments.length > 0) {
-    return other(a, b);
-  }
-  return 0;
-}
-
-function slowArgLength(a, b) {
-  if (arguments.length > 2) {
+function argLength(a, b) {
+  if (arguments.length < 3) {
     return other(a, b);
   }
   return 0;
