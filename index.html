@@ -6,10 +6,10 @@
 
     <button id="runNormalButton">Run normal</button> <span id="normalResult"></span><br />
     <button id="runArgumentsButton">Run arguments</button> <span id="argumentsResult"></span><br />
+    <button id="runSpreadOpButton">Run sperad operator</button> <span id="spreadOpResult"></span><br /><br />
     <button id="runIndexedArgumentsButton">Run indexed arguments</button> <span id="indexedArgumentsResult"></span><br />
     <button id="runFastArgLengthButton">Run fast arguments length check</button> <span id="fastArgLengthResult"></span><br />
     <button id="runSlowArgLengthButton">Run slow arguments length check</button> <span id="slowArgLengthResult"></span><br />
-    <button id="runSpreadOpButton">Run sperad operator</button> <span id="spreadOpResult"></span><br />
 
     <h2>How to test</h2>
 
@@ -43,6 +43,16 @@
         document.getElementById('argumentsResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
       });
 
+      document.getElementById('runSpreadOpButton').addEventListener('click', () => {
+        const startTime = performance.now();
+        let sum = 0;
+        for (let i = 0; i < loopNum; i++) {
+          sum += spreadOp(1, 2);
+        }
+        const endTime = performance.now();
+        document.getElementById('spreadOpResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
+      });
+
       document.getElementById('runIndexedArgumentsButton').addEventListener('click', () => {
         const startTime = performance.now();
         let sum = 0;
@@ -73,16 +83,6 @@
         document.getElementById('slowArgLengthResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
       });
 
-      document.getElementById('runSpreadOpButton').addEventListener('click', () => {
-        const startTime = performance.now();
-        let sum = 0;
-        for (let i = 0; i < loopNum; i++) {
-          sum += spreadOp(1, 2);
-        }
-        const endTime = performance.now();
-        document.getElementById('spreadOpResult').innerText = (endTime - startTime).toFixed(2) + 'ms';
-      });
-
       const other = (a, b) => {
         return a + b;
       };
@@ -95,6 +95,10 @@
         return other.apply(this, arguments);
       }
 
+      const spreadOp = (...args) => {
+        return other.apply(this, args);
+      };
+
       function indexedArguments() {
         return other(arguments[0], arguments[1]);
       }
@@ -103,17 +107,15 @@
         if (arguments.length > 0) {
           return other(a, b);
         }
+        return 0;
       }
 
       function slowArgLength(a, b) {
         if (arguments.length > 2) {
           return other(a, b);
         }
+        return 0;
       }
-
-      const spreadOp = (...args) => {
-        return other.apply(this, args);
-      };
     </script>
     <script>
       document.getElementById('testCode').innerText = document.getElementById('testScript').innerText.replace(/      /g, '');
