@@ -1,6 +1,6 @@
 # js-arguments-test
 
-This is a micro benchmark test for comparing the performance and memory allocation among the following three JavaScript function arguments styles.
+This is a micro benchmark test for comparing the performance and memory allocation among the following four JavaScript function arguments styles.
 
 ```javascript
 function normalOp(a, b) {
@@ -14,15 +14,15 @@ function leakyArguments() {
 const spreadOp = (...args) => {
   return other.apply(this, args);
 };
-```
 
-We added some test cases
-
-```javascript
 function indexedArguments() {
   return other(arguments[0], arguments[1]);
 }
+```
 
+We added arguments.length check tests.
+
+```javascript
 function fastArgLength(a, b) {
   if (arguments.length > 0) {
     return other(a, b);
@@ -38,4 +38,4 @@ function slowArgLength(a, b) {
 }
 ```
 
-[Online Demo](https://rawcdn.githack.com/takahirox/js-arguments-test/v1.0.1/index.html)
+[Online Demo](https://rawcdn.githack.com/takahirox/js-arguments-test/v1.0.2/index.html)
